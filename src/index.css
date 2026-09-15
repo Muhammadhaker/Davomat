@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+/* Telefon animatsiyasi — pastdan chiqadi */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(100%); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Modal animatsiyasi — yuqoridan tushadi */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* iPhone pastki xavfsiz zona */
+.pb-safe-bottom {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* Telefonda tap ta'siri */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Jadval scroll-dan chiqib ketmasin */
+html, body {
+  overflow-x: hidden;
+}
