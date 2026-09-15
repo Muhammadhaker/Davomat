@@ -12,15 +12,15 @@ function todayStr() {
 }
 
 export default function App() {
-  const [students, setStudents]       = useState([])
-  const [statuses, setStatuses]       = useState({})
-  const [sabablar, setSabablar]       = useState({})
-  const [filter, setFilter]           = useState('all')
-  const [modalOpen, setModalOpen]     = useState(false)
+  const [students, setStudents] = useState([])
+  const [statuses, setStatuses] = useState({})
+  const [sabablar, setSabablar] = useState({})
+  const [filter, setFilter] = useState('all')
+  const [modalOpen, setModalOpen] = useState(false)
   const [editStudent, setEditStudent] = useState(null)
-  const [loading, setLoading]         = useState(true)
-  const [saving, setSaving]           = useState(false)
-  const [currentDate]                 = useState(todayStr())
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [currentDate] = useState(todayStr())
 
   const loadAll = useCallback(async () => {
     try {
@@ -31,13 +31,13 @@ export default function App() {
       ])
       setStudents(studs)
       const statusMap = {}
-      const sababMap  = {}
+      const sababMap = {}
       studs.forEach(s => { statusMap[s._id] = null; sababMap[s._id] = '' })
       if (att?.records?.length) {
         att.records.forEach(r => {
           if (r.student?._id) {
             statusMap[r.student._id] = r.status
-            sababMap[r.student._id]  = r.sabab || ''
+            sababMap[r.student._id] = r.sabab || ''
           }
         })
       }
@@ -99,9 +99,9 @@ export default function App() {
     }
   }
 
-  const openAdd    = () => { setEditStudent(null); setModalOpen(true) }
-  const openEdit   = (s) => { setEditStudent(s);   setModalOpen(true) }
-  const closeModal = () => { setModalOpen(false);  setEditStudent(null) }
+  const openAdd = () => { setEditStudent(null); setModalOpen(true) }
+  const openEdit = (s) => { setEditStudent(s); setModalOpen(true) }
+  const closeModal = () => { setModalOpen(false); setEditStudent(null) }
 
   const handleSaveAll = async () => {
     const belgilanmagan = students.filter(s => !statuses[s._id])
@@ -113,8 +113,8 @@ export default function App() {
       setSaving(true)
       const records = students.map(s => ({
         studentId: s._id,
-        status:    statuses[s._id] ?? null,
-        sabab:     statuses[s._id] === 'sababli' ? (sabablar[s._id] || '') : '',
+        status: statuses[s._id] ?? null,
+        sabab: statuses[s._id] === 'sababli' ? (sabablar[s._id] || '') : '',
       }))
       await api.saveAttendance({ date: currentDate, records })
       toast.success('Davomat saqlandi ✅')
@@ -129,17 +129,17 @@ export default function App() {
     try {
       const records = students.map(s => ({
         studentId: s._id,
-        status:    statuses[s._id] ?? null,
-        sabab:     statuses[s._id] === 'sababli' ? (sabablar[s._id] || '') : '',
+        status: statuses[s._id] ?? null,
+        sabab: statuses[s._id] === 'sababli' ? (sabablar[s._id] || '') : '',
       }))
       await api.saveAttendance({ date: currentDate, records })
-      const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-      const res  = await fetch(`${BASE}/attendance/export?date=${currentDate}`)
+      const BASE = 'https://davomat-5ajr.onrender.com/api'
+      const res = await fetch(`${BASE}/attendance/export?date=${currentDate}`)
       if (!res.ok) throw new Error('Export xatoligi')
       const blob = await res.blob()
-      const url  = URL.createObjectURL(blob)
-      const a    = document.createElement('a')
-      a.href     = url
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
       a.download = `davomat_${currentDate}.xlsx`
       a.click()
       URL.revokeObjectURL(url)
@@ -150,15 +150,15 @@ export default function App() {
   }
 
   const stats = {
-    total:         students.length,
-    keldi:         Object.values(statuses).filter(v => v === 'keldi').length,
-    kelmadi:       Object.values(statuses).filter(v => v === 'kelmadi').length,
-    sababli:       Object.values(statuses).filter(v => v === 'sababli').length,
+    total: students.length,
+    keldi: Object.values(statuses).filter(v => v === 'keldi').length,
+    kelmadi: Object.values(statuses).filter(v => v === 'kelmadi').length,
+    sababli: Object.values(statuses).filter(v => v === 'sababli').length,
     belgilanmagan: students.filter(s => !statuses[s._id]).length,
   }
 
   const filtered = students.filter(s => {
-    if (filter === 'all')           return true
+    if (filter === 'all') return true
     if (filter === 'belgilanmagan') return !statuses[s._id]
     return statuses[s._id] === filter
   })
