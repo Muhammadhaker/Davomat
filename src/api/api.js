@@ -1,5 +1,5 @@
 // Backend manzili: .env faylida VITE_API_URL=http://localhost:5000/api
-const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
+const BASE = import.meta.env.VITE_API_URL || 'https://davomat-5ajr.onrender.com/api'
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, {
