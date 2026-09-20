@@ -166,16 +166,26 @@ export default function App() {
         await api.saveAttendance({ date: currentDate, records })
       }
 
-      const BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api'
-      const res  = await fetch(`${BASE}/attendance/export?date=${currentDate}`)
-      if (!res.ok) throw new Error('Export xatoligi')
+      // BASE ni api.js dagi kabi olamiz — localhost yoki vercel /api
+      const BASE = import.meta.env.VITE_API_URL || 'https://davomat-5ajr.onrender.com/api'
+      const res  = await fetch(`${BASE}/attendance/export?date=${currentDate}`, {
+        method: 'GET',
+        // Content-Type YO'Q — chunki fayl olamiz, JSON emas
+      })
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.message || 'Export xatoligi')
+      }
 
       const blob = await res.blob()
       const url  = URL.createObjectURL(blob)
       const a    = document.createElement('a')
       a.href     = url
       a.download = `davomat_${currentDate}.xlsx`
+      document.body.appendChild(a)
       a.click()
+      document.body.removeChild(a)
       URL.revokeObjectURL(url)
       toast.success('Excel yuklab olindi 📊')
     } catch (err) {
