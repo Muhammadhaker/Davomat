@@ -167,7 +167,7 @@ export default function App() {
       }
 
       // BASE ni api.js dagi kabi olamiz — localhost yoki vercel /api
-      const BASE = import.meta.env.VITE_API_URL || 'https://davomat-5ajr.onrender.com/api'
+      const BASE = import.meta.env.VITE_API_URL || 'https://davomat-23qb.onrender.com'
       const res  = await fetch(`${BASE}/attendance/export?date=${currentDate}`, {
         method: 'GET',
         // Content-Type YO'Q — chunki fayl olamiz, JSON emas
